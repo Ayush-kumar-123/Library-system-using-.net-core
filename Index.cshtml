@@ -1,0 +1,55 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div>This uses google books api to fetch book name and its author.</div>
+<div>This uses javascript fetch function</div>
+<div><a href="/BookList/Create">Create your own book</a></div>
+<style>
+    .myDiv {
+        border: 5px outset blue;
+        background-color: lightblue;
+        text-align: center;
+    }
+    #myInput {
+        background-image: url('/css/searchicon.png');
+        background-position: 10px 12px;
+        background-repeat: no-repeat;
+        width: 100%;
+        font-size: 16px;
+        padding: 12px 20px 12px 40px;
+        border: 1px solid #ddd;
+        margin-bottom: 12px;
+    }
+</style>
+<script>
+    function moni() {
+        const ayush = [];
+        var input = document.getElementById("myInput").value;
+        fetch('https://www.googleapis.com/books/v1/volumes?q=' + input + '&key=AIzaSyBPnXiW3D2jcbvpG718okU0Ob2D9Kd1mho')
+            .then(res => res.json())
+            .then((out) => {
+                console.log(ayush);
+                for (let i = 0; i < out['items'].length; i++) {
+                    ayush.push(out['items'][i]["volumeInfo"]["title"])
+
+                    ayush.push(out['items'][i]["volumeInfo"]["authors"][0])
+                }
+                console.log(ayush);
+                let txt = "";
+                for (let i = 0; i < ayush.length; i = i + 2) {
+                    txt += "<div class=\"myDiv\">Book:" + ayush[i] + "<br>Author:" + ayush[i + 1] + "</div><br>"
+                }
+                console.log(txt);
+                document.getElementById("demo").innerHTML = txt;
+
+            }).catch(err => console.error(err));
+    }
+
+
+</script>
+<input type="text" id="myInput" placeholder="Search for Book">
+<button onclick="moni()">Try it</button>
+<p id="demo"></p>
+
